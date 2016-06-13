@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function cursodrupal_install() {
+  set_time_limit(0);
+
+  $default_theme = 'bartik';
+  $admin_theme = 'seven';
+  theme_enable(array($default_theme));
+
+  // Enable theme
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', $default_theme)
+    ->execute();
+  variable_set('theme_default', $default_theme);
+
+  // Enable the admin theme.
+  theme_enable(array($admin_theme));
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', $admin_theme)
+    ->execute();
+  variable_set('admin_theme', $admin_theme);
+
+  // Create a default role for site editor
+  $editor_role = new stdClass();
+  $editor_role->name = 'editor';
+  $editor_role->weight = 2;
+  user_role_save($editor_role);
+  // Set this as the editor role.
+  variable_set('user_editor_role', $editor_role->rid);
+
+  // Create a default role for site administrators, with all available permissions assigned.
+  $admin_role = new stdClass();
+  $admin_role->name = 'administrator';
+  $admin_role->weight = 3;
+  user_role_save($admin_role);
+  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
+  // Set this as the administrator role.
+  variable_set('user_admin_role', $admin_role->rid);
+
+  // Assign user 1 the "administrator" role.
+  db_insert('users_roles')
+    ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
+    ->execute();
+
+  variable_set('site_name', 'Curso Unizar');
+  variable_set('site_slogan', '');
+  variable_set('features_default_export_path', 'profiles/web/modules/features');
+
+  entity_info_cache_clear();
+  cursodrupal_install_all_updates();
+}
+
+function cursodrupal_install_all_updates() {
+  drupal_flush_all_caches();
+  drupal_get_messages('status');
+}

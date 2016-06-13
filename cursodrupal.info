@@ -1,0 +1,5 @@
+name = Curso Drupal UZ
+description = Drupal profile base for the UZ Drupal Course
+version = 1.0
+core = 7.x
+;exclusive = 1
