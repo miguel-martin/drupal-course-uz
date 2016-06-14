@@ -51,7 +51,7 @@ function cursodrupal_install() {
 
   variable_set('site_name', 'Curso Unizar');
   variable_set('site_slogan', '');
-  variable_set('features_default_export_path', 'profiles/web/modules/features');
+  variable_set('features_default_export_path', 'profiles/cursodrupal/modules/features');
 
   entity_info_cache_clear();
   cursodrupal_install_all_updates();
