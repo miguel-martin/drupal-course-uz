@@ -60,4 +60,13 @@ function cursodrupal_install() {
 function cursodrupal_install_all_updates() {
   drupal_flush_all_caches();
   drupal_get_messages('status');
+  // Salto 7001
+}
+
+/**
+ * Activa el módulo admin_menu_toolbar y desactiva el módulo toolbar
+ */
+function cursodrupal_update_7001() {
+  module_enable(array('admin_menu_toolbar'));
+  module_disable(array('toolbar'));
 }

@@ -1,13 +1,13 @@
 core = 7.x
 api = 2
 
+projects[views][version] = 3.13
+projects[views][subdir] = contrib
 
 ####  Specific version
 # projects[views] = 3.11
 
 #### More data
-# projects[views][version] = 3.11
-# projects[views][subdir] = contrib
 
 #### Last version
 # projects[views][]
