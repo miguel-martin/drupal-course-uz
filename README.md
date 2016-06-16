@@ -9,3 +9,11 @@ Perfil base para el curso Drupal en la Universidad de Zaragoza
 - Updates en el .install
 - Creación de la feature curso_blog
 - Pruebas con hook_block_view_alter
+
+## Día 2
+
+- Pruebas con menu router
+- Form API
+- Ejercicio catálogo (página de admin + FAPI + block_info)
+- Custom entities
+- Ejercicio códigos postales (custom entity + CRUD admin ui)
