@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * Implements hook_entity_info().
+ */
+function codpostal_entity_info() {
+  return array(
+    'codigo_postal' => array(
+      'label' => 'Códigos postales',
+      'entity class' => 'Entity',
+      'controller class' => 'EntityAPIController',
+      'base table' => 'codpostal_codigos',
+      'fieldable' => FALSE,
+      'access callback' => 'codpostal_access',
+      'label callback' => 'codpostal_label',
+      'admin ui' => array(
+        'path' => 'admin/content/codigos'
+      ),
+      'entity keys' => array ('id' => 'cid'),
+      'module' => 'codpostal'
+    )
+  );
+}
+
+function codpostal_access() {
+  // ToDo: cualquier podría acceder.
+  return TRUE;
+}
+
+function codpostal_label($codigo) {
+  return isset($codigo->codigo) ? 'Código ' . $codigo->codigo : 'Sin código';
+}
+
+
+/**
+ * Generates the codigo postal editing form.
+ */
+function codigo_postal_form($form, &$form_state, $codigo_postal = NULL, $op) {
+  if ($op == 'add') {
+    $h1 = '<h1>Crear nuevo código postal</h1>';
+    $form['codigo'] = array(
+      '#title' => 'Código postal',
+      '#type' => 'textfield',
+      '#size' => 60,
+      '#default_value' => isset($codigo_postal->name) ? $codigo_postal->name : '',
+    );
+  }
+  elseif ($op == 'edit') {
+    $h1 = '<h1>Editar Codigo postal ' . $codigo_postal->codigo .'</h1>';
+  }
+
+  $form['plan_info'] = array(
+    '#markup' => $h1,
+    '#weight' => -1,
+  );
+
+  $form['name'] = array(
+    '#title' => 'Localidad',
+    '#type' => 'textfield',
+    '#size' => 60,
+    '#default_value' => isset($codigo_postal->name) ? $codigo_postal->name : '',
+  );
+
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Guardar',
+  );
+  return $form;
+}
+
+function codigo_postal_form_submit(&$form, &$form_state) {
+  $codigo = entity_ui_form_submit_build_entity($form, $form_state);
+  $codigo->save();
+  drupal_set_message('El codigo ' . $codigo->codigo . ' se ha guardado correctamente');
+  drupal_goto('admin/content/codigos');
+}
