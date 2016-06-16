@@ -1,0 +1,19 @@
+<?php
+/**
+ * @file
+ * Code for the Curso blog feature.
+ */
+
+include_once 'curso_blog.features.inc';
+
+/**
+ * Implements hook_block_view_alter().
+ * Esto debería ir en otro módulo más adecuado
+ * Aquí solo la lógica relacionada con la feature blog
+ */
+function curso_blog_block_view_alter(&$data, $block) {
+  if ($block->module == 'search' && $block->delta == 'form') {
+    $block->title = 'hola';
+  }
+
+}
