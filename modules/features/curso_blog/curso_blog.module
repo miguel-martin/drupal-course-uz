@@ -13,7 +13,37 @@ include_once 'curso_blog.features.inc';
  */
 function curso_blog_block_view_alter(&$data, $block) {
   if ($block->module == 'search' && $block->delta == 'form') {
-    $block->title = 'hola';
+    $block->title = 'hola2';
   }
 
+}
+
+/**
+ * Implements hook_menu()
+ */
+function curso_blog_menu() {
+  $items['miruta'] = array(
+    'title' => 'Primer ejemplo',
+    'page callback' => '_curso_blog_miruta_basica',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+
+  $items['miruta/%'] = array(
+    'title' => 'Ejemplo con comodin',
+    'page callback' => '_curso_blog_miruta_comodin',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+function _curso_blog_miruta_basica() {
+  return 'hola!';
+}
+
+function _curso_blog_miruta_comodin($name) {
+  return 'Hola ' . $name . '!';
 }
