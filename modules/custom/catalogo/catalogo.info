@@ -1,0 +1,5 @@
+name = Catalogo
+description = Gestión de catalogos
+core = 7.x
+package = Curso
+version = 7.x-1.0

@@ -1,0 +1,113 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+function catalogo_menu() {
+  $items['admin/config/catalogo'] = array(
+    'title' => 'Gestión de catálogo',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('catalogo_form'),
+    'access arguments' => array('administer content'),
+    'type' => MENU_CALLBACK
+  );
+
+  return $items;
+}
+
+function catalogo_form($form, &$form_state) {
+
+  $form['config'] = array(
+    '#title' => 'Configuración básica',
+    '#type' => 'fieldset'
+  );
+
+  $form['config']['oferta'] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Oferta 20%',
+    '#default_value' => variable_get('catalogo_oferta', 0)
+  );
+
+  $form['config']['desc_corta'] = array(
+    '#title' => 'Descripción corta',
+    '#type' => 'textfield',
+    '#default_value' => variable_get('catalogo_desc_corta', '')
+  );
+
+  $form['config']['desc_larga'] = array(
+    '#title' => 'Descripción larga',
+    '#type' => 'textarea',
+    '#default_value' => variable_get('catalogo_desc_larga', '')
+  );
+
+  $form['config']['catalogo_pdf'] = array(
+  '#title' => 'PDF del catálogo',
+  '#type' => 'managed_file',
+  '#upload_location' => 'public://catalogo/',
+  '#default_value' => variable_get('catalogo_pdf', 0)
+);
+
+  $form["submit_button"] = array(
+    '#type' => 'submit',
+    '#value' => 'Guardar'
+  );
+
+  return $form;
+}
+
+function catalogo_form_validate($form, &$form_state) {
+  if (strlen($form_state['values']['desc_corta']) < 5 ) {
+    form_set_error('desc_corta', 'La descripción corta debe ser mayor de 5 caracteres');
+  }
+}
+
+function catalogo_form_submit($form, &$form_state) {
+  variable_set('catalogo_desc_corta', $form_state['values']['desc_corta']);
+  variable_set('catalogo_desc_larga', $form_state['values']['desc_larga']);
+  variable_set('catalogo_oferta', $form_state['values']['oferta']);
+  variable_set('catalogo_pdf', $form_state['values']['catalogo_pdf']);
+  drupal_set_message('Se ha guardado correctamente');
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function catalogo_block_info() {
+  // This example comes from node.module.
+  $blocks['catalogo'] = array(
+    'info' => 'Catálogo',
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function catalogo_block_view($delta) {
+  $block = array();
+  if ($delta == 'catalogo') {
+    $block['subject'] = 'Catálogo';
+    $block['content'] = _catalogo_get_info();
+  }
+
+  return $block;
+}
+
+function _catalogo_get_info() {
+  $content = '';
+  if (variable_get('catalogo_oferta')) {
+    $content .= '<p>¡Todo nuestro catálogo al 20%!</p>';
+  }
+  $content .= '<p>' . variable_get('catalogo_desc_corta') .'</p>';
+
+  if($fid = variable_get('catalogo_pdf', 0)) {
+    $file = file_load($fid);
+    if ($file) {
+      $content .= l('Catalogo PDF', file_create_url($file->uri));
+    }
+  }
+
+  return $content;
+
+}
