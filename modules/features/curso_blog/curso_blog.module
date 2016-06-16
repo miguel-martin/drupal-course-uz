@@ -37,7 +37,27 @@ function curso_blog_menu() {
     'type' => MENU_CALLBACK
   );
 
+  $items['usuarios/%curso_blog_usuario'] = array(
+    'title' => 'Ejemplo con comodin',
+    'page callback' => '_curso_blog_usuarios',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+
   return $items;
+}
+
+/**
+ * Implements hook_menu_alter()
+ */
+function curso_blog_menu_alter(&$items) {
+  $items['user/%']['page callback'] = '_curso_blog_hack';
+  $items['user/%']['access callback'] = '_curso_blog_perm';
+}
+
+function _curso_blog_perm() {
+  return TRUE;
 }
 
 function _curso_blog_miruta_basica() {
@@ -46,4 +66,17 @@ function _curso_blog_miruta_basica() {
 
 function _curso_blog_miruta_comodin($name) {
   return 'Hola ' . $name . '!';
+}
+
+function curso_blog_usuario_load($uid) {
+  $user = user_load($uid);
+  return $user;
+}
+
+function _curso_blog_usuarios($user) {
+  return 'Eres ' . $user->name;
+}
+
+function _curso_blog_hack($user) {
+  return 'Hacked!';
 }
