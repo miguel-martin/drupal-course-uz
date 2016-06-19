@@ -1,0 +1,90 @@
+<?php
+/**
+ * @file
+ * Code for the CursoBlog feature.
+ * Cuando cambiemos hay que hacer un CACHE CLEAN (drush cc all) para que actualice.
+ */
+
+include_once 'cursoblog.features.inc';
+
+/**
+ * Cambiar el titulo del bloque de búsqueda. Para ello nos fijamos en la API del module.
+ * https://api.drupal.org/api/drupal/modules!block!block.api.php/function/hook_block_view_alter/7.x
+ */ 
+function cursoblog_block_view_alter(&$data, $block){
+    //dsm($block);
+	if ($block->module == 'search' && $block->delta == 'form'){
+		$block->title='hola';
+	}
+}
+
+/**
+ * Implements hook_menu.
+ * Documentacion en https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_menu/7.x
+ * Si la lógica es muy grande se puede sacar a un file .inc que no se carga en todas las paginas, solo algunas.
+ */
+function cursoblog_menu(){
+
+	$items['miruta'] = array(
+    	'title' => 'Ejemplo',
+    	'page callback' => '_cursoblog_miruta_basica', /* la funcion a la que llamaras */
+    	'access arguments' => array('access content'), /* podria llamar a access callback, funcion que devuelva 1 o 0 */
+    	'type' => MENU_CALLBACK,
+  	);
+
+	/* para llamar con parametros */
+  	$items['miruta/%'] = array(
+    	'title' => 'Ejemplo con comodin',
+    	'page callback' => '_cursoblog_miruta_comodin', /* la funcion a la que llamaras */
+    	'access arguments' => array('access content'), /* podria llamar a access callback, funcion que devuelva 1 o 0 */
+    	'page arguments' => array(1), /* el comodin esta en la posicion 1. 0 sería 'miruta'. Por eso le paso el 1 */
+    	'type' => MENU_CALLBACK,
+  	);
+
+  	$items['usuarios/%cursoblog_usuario'] = array( /* antes de llamar al callback, llama a la funcion cursoblog_usuario. */
+    	'title' => 'Ejemplo usuario',
+    	'page callback' => '_cursoblog_miruta_usuarios', /* la funcion a la que llamaras */
+    	'access arguments' => array('access content'), /* podria llamar a access callback, funcion que devuelva 1 o 0 */
+    	'page arguments' => array(1), /* el comodin esta en la posicion 1. 0 sería 'miruta'. Por eso le paso el 1 */
+    	'type' => MENU_CALLBACK,
+  	);
+
+	return $items;
+}
+
+/**
+ * Implements hook_menu_alter
+ */
+function cursoblog_menu_alter(&$items){
+	$items['user/%']['page callback'] = '_cursoblog_hack';
+	//$items['user/%']['access arguments'] = array('access content');
+	$items['user/%']['access callback'] = '_cursoblog_permitir';
+}
+
+function _cursoblog_permitir(){
+	return TRUE;
+}
+
+function _cursoblog_hack($usuario){
+	return "Hacked ".$usuario->name;
+}
+
+function _cursoblog_miruta_basica(){
+	return 'hola';
+}
+
+function _cursoblog_miruta_comodin($name){
+	return 'hola ' .$name;
+}
+
+function _cursoblog_miruta_usuarios($objetousuario){
+	
+	//dsm($objetousuario);
+	return 'Hola '. $objetousuario->name;
+}
+
+/* al ponerle después del nombre del parametro el load, ejecuta esta funcion antes del callback */
+function cursoblog_usuario_load($uid){ 
+	$user = user_load($uid); // cargamos el objeto usuario.
+	return $user;
+}

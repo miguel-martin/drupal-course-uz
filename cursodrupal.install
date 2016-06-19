@@ -71,18 +71,17 @@ function cursodrupal_update_7001() {
   module_disable(array('toolbar'));
 }
 
+
 /**
- * Carga términos en la taxonomía
+ * Cargar términos en la taxonomía ejemplotaxonomía que está creada en la feature.
  */
-function cursodrupal_update_7002() {
-  $vocabulary = taxonomy_vocabulary_machine_name_load('categorias');
-  if ($vocabulary) {
-    $terminos = array('pop', 'rock', 'opera');
-    $term = array();
-    foreach ($terminos as $termino) {
-      $term['name'] = $termino;
-      $term['vid'] = $vocabulary->vid;
-      taxonomy_term_save((object)$term);
-    }
-  }
+function cursodrupal_update_7002(){
+  $vocabulario = taxonomy_vocabulary_machine_name_load('ejemplotaxonomia');
+  $terminos = array('pop','rock','opera');
+  $term= array();
+  foreach($terminos as $termino){
+    $term['name'] = $termino;
+    $term['vid'] = $vocabulario->vid;
+    taxonomy_term_save((object)$term);
+  } 
 }

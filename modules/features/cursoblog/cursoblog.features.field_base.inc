@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * curso_blog.features.field_base.inc
+ * cursoblog.features.field_base.inc
  */
 
 /**
  * Implements hook_field_default_field_bases().
  */
-function curso_blog_field_default_field_bases() {
+function cursoblog_field_default_field_bases() {
   $field_bases = array();
 
   // Exported field_base: 'body'.
@@ -31,13 +31,13 @@ function curso_blog_field_default_field_bases() {
     'type' => 'text_with_summary',
   );
 
-  // Exported field_base: 'field_categoria'.
-  $field_bases['field_categoria'] = array(
+  // Exported field_base: 'field_tipos'.
+  $field_bases['field_tipos'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_categoria',
+    'field_name' => 'field_tipos',
     'indexes' => array(
       'tid' => array(
         0 => 'tid',
@@ -48,7 +48,7 @@ function curso_blog_field_default_field_bases() {
     'settings' => array(
       'allowed_values' => array(
         0 => array(
-          'vocabulary' => 'categorias',
+          'vocabulary' => 'ejemplotaxonomia',
           'parent' => 0,
         ),
       ),

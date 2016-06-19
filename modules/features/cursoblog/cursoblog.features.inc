@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * curso_blog.features.inc
+ * cursoblog.features.inc
  */
 
 /**
  * Implements hook_ctools_plugin_api().
  */
-function curso_blog_ctools_plugin_api($module = NULL, $api = NULL) {
+function cursoblog_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -16,10 +16,10 @@ function curso_blog_ctools_plugin_api($module = NULL, $api = NULL) {
 /**
  * Implements hook_node_info().
  */
-function curso_blog_node_info() {
+function cursoblog_node_info() {
   $items = array(
-    'entrada_de_blog' => array(
-      'name' => t('Entrada de blog'),
+    'cursoblog' => array(
+      'name' => t('CursoBlogMod'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',

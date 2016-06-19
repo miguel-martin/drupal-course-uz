@@ -1,18 +1,18 @@
 <?php
 /**
  * @file
- * curso_blog.features.field_instance.inc
+ * cursoblog.features.field_instance.inc
  */
 
 /**
  * Implements hook_field_default_field_instances().
  */
-function curso_blog_field_default_field_instances() {
+function cursoblog_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-entrada_de_blog-body'.
-  $field_instances['node-entrada_de_blog-body'] = array(
-    'bundle' => 'entrada_de_blog',
+  // Exported field_instance: 'node-cursoblog-body'.
+  $field_instances['node-cursoblog-body'] = array(
+    'bundle' => 'cursoblog',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -54,9 +54,9 @@ function curso_blog_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-entrada_de_blog-field_categoria'.
-  $field_instances['node-entrada_de_blog-field_categoria'] = array(
-    'bundle' => 'entrada_de_blog',
+  // Exported field_instance: 'node-cursoblog-field_tipos'.
+  $field_instances['node-cursoblog-field_tipos'] = array(
+    'bundle' => 'cursoblog',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -76,14 +76,13 @@ function curso_blog_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
-    'field_name' => 'field_categoria',
-    'label' => 'Categoría modificada desde código',
-    'required' => 0,
+    'field_name' => 'field_tipos',
+    'label' => 'tipos',
+    'required' => FALSE,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
       'module' => 'taxonomy',
       'settings' => array(
         'autocomplete_path' => 'taxonomy/autocomplete',
@@ -97,7 +96,7 @@ function curso_blog_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Body');
-  t('Categoría');
+  t('tipos');
 
   return $field_instances;
 }

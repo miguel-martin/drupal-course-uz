@@ -1,18 +1,18 @@
 <?php
 /**
  * @file
- * curso_blog.features.taxonomy.inc
+ * cursoblog.features.taxonomy.inc
  */
 
 /**
  * Implements hook_taxonomy_default_vocabularies().
  */
-function curso_blog_taxonomy_default_vocabularies() {
+function cursoblog_taxonomy_default_vocabularies() {
   return array(
-    'categorias' => array(
-      'name' => 'Categorías',
-      'machine_name' => 'categorias',
-      'description' => '',
+    'ejemplotaxonomia' => array(
+      'name' => 'ejemplotaxonomia',
+      'machine_name' => 'ejemplotaxonomia',
+      'description' => 'ejemplotaxonomia',
       'hierarchy' => 0,
       'module' => 'taxonomy',
       'weight' => 0,

@@ -1,76 +1,119 @@
 <?php
 
 /**
- * Implements hook_menu()
+ * Implements hook_menu.
+ * Definir las rutas del formulario...
  */
-function catalogo_menu() {
-  $items['admin/config/catalogo'] = array(
-    'title' => 'Gestión de catálogo',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('catalogo_form'),
-    'access arguments' => array('administer content'),
-    'type' => MENU_CALLBACK
-  );
+function catalogo_menu(){
 
-  return $items;
-}
+	// la ruta de administrarlo
+	$items['admin/config/catalogo'] = array(
+    	'title' => 'Gestión de catálogo',
+    	'page callback' => 'drupal_get_form', /* funcion que va a renderizar un formulario */
+    	'page arguments' => array('catalogo_form'), /* el id del formulario que renderizará */
+    	'access arguments' => array('administer content'), /* solo lo ve quien puede administrar contenido */
+    	'type' => MENU_CALLBACK,
+  	);
 
-function catalogo_form($form, &$form_state) {
+	return $items;
 
-  $form['config'] = array(
-    '#title' => 'Configuración básica',
-    '#type' => 'fieldset'
-  );
-
-  $form['config']['oferta'] = array(
-    '#type' => 'checkbox',
-    '#title' => 'Oferta 20%',
-    '#default_value' => variable_get('catalogo_oferta', 0)
-  );
-
-  $form['config']['desc_corta'] = array(
-    '#title' => 'Descripción corta',
-    '#type' => 'textfield',
-    '#default_value' => variable_get('catalogo_desc_corta', '')
-  );
-
-  $form['config']['desc_larga'] = array(
-    '#title' => 'Descripción larga',
-    '#type' => 'textarea',
-    '#default_value' => variable_get('catalogo_desc_larga', '')
-  );
-
-  $form['config']['catalogo_pdf'] = array(
-  '#title' => 'PDF del catálogo',
-  '#type' => 'managed_file',
-  '#upload_location' => 'public://catalogo/',
-  '#default_value' => variable_get('catalogo_pdf', 0)
-);
-
-  $form["submit_button"] = array(
-    '#type' => 'submit',
-    '#value' => 'Guardar'
-  );
-
-  return $form;
-}
-
-function catalogo_form_validate($form, &$form_state) {
-  if (strlen($form_state['values']['desc_corta']) < 5 ) {
-    form_set_error('desc_corta', 'La descripción corta debe ser mayor de 5 caracteres');
-  }
-}
-
-function catalogo_form_submit($form, &$form_state) {
-  variable_set('catalogo_desc_corta', $form_state['values']['desc_corta']);
-  variable_set('catalogo_desc_larga', $form_state['values']['desc_larga']);
-  variable_set('catalogo_oferta', $form_state['values']['oferta']);
-  variable_set('catalogo_pdf', $form_state['values']['catalogo_pdf']);
-  drupal_set_message('Se ha guardado correctamente');
 }
 
 /**
- * Implements hook_block_info().
+ * Implements hook_form.
+ * Construir el formulario.
+ */
+function catalogo_form($node, &$form_state){
+
+	// creamos un fieldset para agrupar todo allí dentro...
+	$form['config'] = array(
+		'#type' => 'fieldset',
+		'#title' => 'Configuracion basica',
+	);
+
+	// creo el cammpo checkbox...
+	$form['config']['oferta'] = array(
+  		'#type' => 'checkbox', 
+		'#title' => 'Oferta 20%',
+		'#default_value' => variable_get('catalogo_oferta',0), 
+		//como en el submit hemos guardado aqui la variable, la leemos. Si no existe, le ponemos por defecto 0.
+	);
+
+	// creo el campo descripcion corta...
+	$form['config']['desc_corta'] = array(
+  		'#type' => 'textfield', 
+  		'#size' => 60,
+		'#title' => 'Descripcion corta',
+		'#default_value' => variable_get('catalogo_desc_corta',''),
+	);
+
+	// creo el campo descripcion corta...
+	$form['config']['desc_larga'] = array(
+  		'#type' => 'textarea', 
+		'#title' => 'Descripcion larga',
+		'#default_value' => variable_get('catalogo_desc_larga',''),
+		'#required' => TRUE, /* comprobar que no está vacío */
+	);
+
+	// el campo fichero...
+	// ojo, hay que marcar como que ese fichero lo está usando alguien/algo, porque sino cuando pasa el cron lo borra!!!
+	// podríamos usar módulo Drag&Drop que es un widget más interesante para subir...
+	$form['config']['catalogo_pdf'] = array(
+  		'#title' => 'Catálogo PDF',
+  		'#type' => 'managed_file',
+  		'#description' => 'Sube el fichero PDF de catálogo.',
+  		'#upload_location' => 'public://catalogo/',
+  		'#default_value' => variable_get('catalogo_pdf'),
+	);
+
+	// creo el botón submit
+	$form['config']["submit_button"] = array(
+		'#type' => 'submit',
+		'#value' => 'Guardar',
+	);
+
+	return $form;
+}
+
+/**
+ * Implements hook_form_validate
+ * Validacion del formulario, se ejecuta en cuanto haces submit.
+ */
+ function catalogo_form_validate($node, &$form_state){
+
+ 	//dsm($form_state);
+
+ 	// Vamos a comprobar que la descripcion corta es > que 10 caracteres.
+ 	if (strlen($form_state['values']['desc_corta'])<5){
+ 		form_set_error('desc_corta','La descripción corta debe ser mayor que cinco caracteres');
+ 	}
+
+ }
+
+
+ /**
+ * Implements hook_form_validate
+ * Envío del formulario, se ejecuta en cuando pasa el validador de validate.
+ */
+ function catalogo_form_submit($node, &$form_state){
+
+ 	// aqui deberiamos hacer el file add usage para que se guarde que el fichero se guarde como que lo usa alguien. 
+ 	// Sino cron lo borraría.
+
+ 	// vamos a usar de momento la tabla 'variable', aunque lo idóneo sería hacerlo en custom entity, pero nos sirve.
+ 	// la tabla variable sirve para guardar basurillas
+
+ 	variable_set('catalogo_desc_corta', $form_state['values']['desc_corta']);
+ 	variable_set('catalogo_desc_larga', $form_state['values']['desc_larga']);
+ 	variable_set('catalogo_oferta', $form_state['values']['oferta']);
+ 	variable_set('catalogo_pdf', $form_state['values']['catalogo_pdf']);
+ 	drupal_set_message('Se ha guardado correctamente',$type='status',$repeat = TRUE);
+
+ }
+
+/**
+ * Implements hook_block_info
+ * Vamos a crear el bloque, que pasará a estar disponible en Bloques y sin asignar.
  */
 function catalogo_block_info() {
   // This example comes from node.module.
@@ -82,32 +125,34 @@ function catalogo_block_info() {
 }
 
 /**
- * Implements hook_block_view().
+ * Vamos a hacer que se pinte el módulo. Pero luego hay que asignarlo a Sidebar o a la region donde queramos.
  */
-function catalogo_block_view($delta) {
-  $block = array();
-  if ($delta == 'catalogo') {
-    $block['subject'] = 'Catálogo';
-    $block['content'] = _catalogo_get_info();
-  }
+function catalogo_block_view($delta){
+	$block = array();
 
-  return $block;
+	if ($delta == 'catalogo'){
+		$block['subject'] = 'Catálogo';
+		$block['content'] = _catalogo_get_info(); 
+		//vamos a hacer una funcion que nos pinte el contenido aunque sería mejor hacerlo con theming!
+	}
+
+	return $block;
 }
 
-function _catalogo_get_info() {
-  $content = '';
-  if (variable_get('catalogo_oferta')) {
-    $content .= '<p>¡Todo nuestro catálogo al 20%!</p>';
-  }
-  $content .= '<p>' . variable_get('catalogo_desc_corta') .'</p>';
+function _catalogo_get_info(){
+	$content = '';
+	if (variable_get('catalogo_oferta')){
+		$content .= '<p>Todo al 20%</p>';
+	}
+	$content .= '<p>'.variable_get('catalogo_desc_corta').'</p>';
 
-  if($fid = variable_get('catalogo_pdf', 0)) {
-    $file = file_load($fid);
-    if ($file) {
-      $content .= l('Catalogo PDF', file_create_url($file->uri));
-    }
-  }
+	if ($fid = variable_get('catalogo_pdf',0)){
+		$file=file_load($fid);
+		//dsm($file);
+	}
+	if ($file){
+		$content .= l('Catálogo PDF',$file->uri); // esto crea un link
+	}
 
-  return $content;
-
+	return $content;
 }

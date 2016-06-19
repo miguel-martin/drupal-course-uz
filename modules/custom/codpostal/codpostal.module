@@ -5,16 +5,17 @@
  */
 function codpostal_entity_info() {
   return array(
-    'codigo_postal' => array(
+    'codigo_postal' => array(                 // DEFINO LA ENTIDAD codigo_postal. Este nombre condiciona p ej. los nombres de las funciones entity_
       'label' => 'Códigos postales',
       'entity class' => 'Entity',
       'controller class' => 'EntityAPIController',
-      'base table' => 'codpostal_codigos',
+      'base table' => 'codpostal_codigos',    // nombre de la tabla mysql creada en el .install ($schema['codpostal_codigos'])
       'fieldable' => FALSE,
       'access callback' => 'codpostal_access',
       'label callback' => 'codpostal_label',
-      'admin ui' => array(
-        'path' => 'admin/content/codigos'
+      'admin ui' => array(                    // explicación en: https://www.drupal.org/node/1021576
+        'path' => 'admin/content/codigos',
+        'file' => 'codpostal.admin.inc'
       ),
       'entity keys' => array ('id' => 'cid'),
       'module' => 'codpostal'
@@ -22,56 +23,53 @@ function codpostal_entity_info() {
   );
 }
 
-function codpostal_access() {
-  // ToDo: cualquier podría acceder.
-  return TRUE;
-}
-
-function codpostal_label($codigo) {
-  return isset($codigo->codigo) ? 'Código ' . $codigo->codigo : 'Sin código';
-}
-
 
 /**
- * Generates the codigo postal editing form.
+ * ToDo. Otorga accesos a quienes pueden operar sobre codigos postales.
  */
-function codigo_postal_form($form, &$form_state, $codigo_postal = NULL, $op) {
-  if ($op == 'add') {
-    $h1 = '<h1>Crear nuevo código postal</h1>';
-    $form['codigo'] = array(
-      '#title' => 'Código postal',
-      '#type' => 'textfield',
-      '#size' => 60,
-      '#default_value' => isset($codigo_postal->name) ? $codigo_postal->name : '',
+function codpostal_access() {
+	return TRUE;
+}
+
+/**
+ * Determina cuál de todos los campos de la entidad es la etiqueta.
+ */
+function codpostal_label($codigo_postal){
+	if (isset($codigo_postal->codigo)){
+		return 'Código: '. $codigo_postal->codigo;
+	}
+	else{
+		return "Sin código asignado.";
+	}
+}
+
+
+/*
+ * Implements hook_admin_menu_output_build
+ * Si por ejemplo quisiera añadir un menú personalizado...
+ */
+/*function codpostal_admin_menu_output_build(&$content) {
+  dsm($content);
+
+  if (isset($content['menu']['admin/content'])) {
+    $content['menu']['admin/content']['miguel'] = array(
+      '#title' => 'Gestión de códigos', 
+      '#access' => user_access('administer site configuration'), 
+      '#href' => 'admin/content/codigos',
     );
   }
-  elseif ($op == 'edit') {
-    $h1 = '<h1>Editar Codigo postal ' . $codigo_postal->codigo .'</h1>';
+}*/
+
+/*
+ * Implements hook_admin_menu_output_alter
+ * Para arreglar el título de Códigos postales!
+ */
+function codpostal_admin_menu_output_alter(&$content){
+  if ( isset($content['menu']['admin/content']['admin/content/codigos']) ){
+    $content['menu']['admin/content']['admin/content/codigos']['#title'] = 'Códigos postales';
   }
-
-  $form['plan_info'] = array(
-    '#markup' => $h1,
-    '#weight' => -1,
-  );
-
-  $form['name'] = array(
-    '#title' => 'Localidad',
-    '#type' => 'textfield',
-    '#size' => 60,
-    '#default_value' => isset($codigo_postal->name) ? $codigo_postal->name : '',
-  );
-
-  $form['actions'] = array('#type' => 'actions');
-  $form['actions']['submit'] = array(
-    '#type' => 'submit',
-    '#value' => 'Guardar',
-  );
-  return $form;
 }
 
-function codigo_postal_form_submit(&$form, &$form_state) {
-  $codigo = entity_ui_form_submit_build_entity($form, $form_state);
-  $codigo->save();
-  drupal_set_message('El codigo ' . $codigo->codigo . ' se ha guardado correctamente');
-  drupal_goto('admin/content/codigos');
-}
+
+
+

@@ -1,34 +1,37 @@
 <?php
 
-function codpostal_schema() {
-  $schema = array();
+/**
+ * Implements hook_schema 
+ */
+function codpostal_schema(){
+	$schema = array();
+	$schema['codpostal_codigos'] = array(
+		'description' => 'Definición de códigos postales/localidad',
+		'fields' => array(
+				'cid' => array(
+					'description' => 'ID unico',
+					'type' => 'serial',
+					'unsigned' => TRUE,
+					'not null' => TRUE,
+				),
+				'codigo' => array(
+					'description' => 'Código postal',
+					'type' => 'varchar',
+					'not null' => TRUE,
+					'default' => '',
+					'length' => 8,
+				),
+				'name' => array(
+					'description' => 'Nombre de la localidad',
+					'type' => 'varchar',
+					'length' => 255,
+					'not null' => TRUE,
+					'default' => '',
+				),
+		),
+		'primary key' => array('cid')
+	);
 
-  $schema['codpostal_codigos'] = array(
-    'description' => 'Definición de códigos postales/localidad',
-    'fields' => array(
-      'cid' => array(
-        'description' => 'ID unico',
-        'type' => 'serial',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-      ),
-      'codigo' => array(
-        'description' => 'Código postal',
-        'type' => 'varchar',
-        'length' => 8,
-        'not null' => TRUE,
-        'default' => ''
-      ),
-      'name' => array(
-        'description' => 'Nombre de la localidad',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => ''
-      )
-    ),
-    'primary key' => array('cid')
-  );
-
-  return $schema;
+	return $schema;
 }
+

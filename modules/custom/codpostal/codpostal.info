@@ -1,5 +1,7 @@
-name = Codpostal
-description = Entidades de códigos postales
+name = codpostal
+description = Entidades de códigos postales 
 core = 7.x
 package = Curso
 version = 7.x-1.0
+
+dependencies[] = entity
