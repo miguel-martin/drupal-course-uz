@@ -19,6 +19,21 @@ function codpostal_entity_info() {
       ),
       'entity keys' => array ('id' => 'cid'),
       'module' => 'codpostal'
+    ),
+    'calle_codigo' => array(
+      'label' => 'Códigos postales calles',
+      'entity class' => 'Entity',
+      'controller class' => 'EntityAPIController',
+      'base table' => 'codpostal_calles',
+      'fieldable' => FALSE,
+      'access callback' => 'codpostalcalle_access',
+      'label callback' => 'codpostalcalle_label',
+      'admin ui' => array(
+          'path' => 'admin/content/codigoscalle',
+          'file' => 'codpostal.admin.inc'
+      ),
+      'entity keys' => array('id' => 'sid'),
+      'module' => 'codpostal'
     )
   );
 }
@@ -32,6 +47,13 @@ function codpostal_access() {
 }
 
 /**
+ * ToDo. Otorga accesos a quienes pueden operar sobre calles de codigos postales.
+ */
+function codpostalcalle_access() {
+  return TRUE;
+}
+
+/**
  * Determina cuál de todos los campos de la entidad es la etiqueta.
  */
 function codpostal_label($codigo_postal){
@@ -42,7 +64,18 @@ function codpostal_label($codigo_postal){
 		return "Sin código asignado.";
 	}
 }
-
+ 
+/**
+ * Determina cuál de todos los campos de la entidad es la etiqueta.
+ */
+function codpostalcalle_label($codigo_postal_calle){
+  if (isset($codigo_postal_calle->codigo)){
+    return 'Código: '. $codigo_postal_calle->codigo;
+  }
+  else{
+    return "Sin código asignado.";
+  }
+}  
 
 /*
  * Implements hook_admin_menu_output_build

@@ -32,6 +32,93 @@ function codpostal_schema(){
 		'primary key' => array('cid')
 	);
 
+	$schema['codpostal_calles'] = array(
+		'description' => 'Definición de códigos postales/calles',
+		'fields' => array(
+			'sid' => array(
+				'description' => 'ID único',
+				'type' => 'serial',
+				'unsigned' => TRUE,
+				'not null' => TRUE,
+			),
+			'codigo' => array(
+					'description' => 'Código postal',
+					'type' => 'varchar',
+					'not null' => TRUE,
+					'default' => '',
+					'length' => 8,
+			),
+			'name' => array(
+					'description' => 'Calle',
+					'type' => 'varchar',
+					'length' => 255,
+					'not null' => TRUE,
+					'default' => '',
+			),
+		),
+		'primary key' => array('sid'),
+		'foreign keys' => array(
+			'codigo' => array (
+				'table' => 'codpostal_codigos',
+				'columns' => array ('codigo' => 'cid')
+			)
+		)
+	);
+
 	return $schema;
+}
+
+function codpostal_install(){
+	entity_info_cache_clear();
+	cursodrupal_install_all_updates();
+}
+
+function codpostal_install_all_updates() {
+  drupal_flush_all_caches();
+  drupal_get_messages('status');
+  //codpostal_update_7001();
+}
+
+/**
+ * Creacion de la tabla de calles.
+*/
+function codpostal_update_7001(){
+
+	// como ya he creado el schema, lo obtengo...
+	$schema = drupal_get_schema();
+
+	$schema['codpostal_calles'] = array(
+		'description' => 'Definición de códigos postales/calles',
+		'fields' => array(
+			'sid' => array(
+				'description' => 'ID único',
+				'type' => 'serial',
+				'unsigned' => TRUE,
+				'not null' => TRUE,
+			),
+			'codigo' => array(
+					'description' => 'Código postal',
+					'type' => 'varchar',
+					'not null' => TRUE,
+					'default' => '',
+					'length' => 8,
+			),
+			'name' => array(
+					'description' => 'Calle',
+					'type' => 'varchar',
+					'length' => 255,
+					'not null' => TRUE,
+					'default' => '',
+			),
+		),
+		'primary key' => array('sid'),
+		'foreign keys' => array(
+			'codigo' => array (
+				'table' => 'codpostal_codigos',
+				'columns' => array ('codigo' => 'cid')
+			)
+		)
+	);
+	db_create_table('codpostal_calles',$schema['codpostal_calles']);
 }
 

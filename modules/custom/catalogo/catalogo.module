@@ -15,6 +15,15 @@ function catalogo_menu(){
     	'type' => MENU_CALLBACK,
   	);
 
+  	// la ruta de mostrar el /catalogo
+	$items['catalogo'] = array(
+    	'title' => 'Página de catálogo',
+    	'page callback' => '_catalogo_get_info_pagina', /* funcion que va a renderizar un formulario */
+    	//'page arguments' => array('catalogo_form'), /* el id del formulario que renderizará */
+    	'access arguments' => array('administer content'), /* solo lo ve quien puede administrar contenido */
+    	'type' => MENU_CALLBACK,
+  	);
+
 	return $items;
 
 }
@@ -64,6 +73,11 @@ function catalogo_form($node, &$form_state){
   		'#description' => 'Sube el fichero PDF de catálogo.',
   		'#upload_location' => 'public://catalogo/',
   		'#default_value' => variable_get('catalogo_pdf'),
+  		'#upload_validators' => array(
+    		'file_validate_extensions' => array('pdf'),
+    		// Pass the maximum file size in bytes
+    		//'file_validate_size' => array(MAX_FILE_SIZE*1024*1024),
+  		),
 	);
 
 	// creo el botón submit
@@ -97,6 +111,11 @@ function catalogo_form($node, &$form_state){
  */
  function catalogo_form_submit($node, &$form_state){
 
+ 	global $user;
+
+ 	//dsm($form_state);
+ 	//dsm($user);
+
  	// aqui deberiamos hacer el file add usage para que se guarde que el fichero se guarde como que lo usa alguien. 
  	// Sino cron lo borraría.
 
@@ -107,6 +126,15 @@ function catalogo_form($node, &$form_state){
  	variable_set('catalogo_desc_larga', $form_state['values']['desc_larga']);
  	variable_set('catalogo_oferta', $form_state['values']['oferta']);
  	variable_set('catalogo_pdf', $form_state['values']['catalogo_pdf']);
+
+
+ 	// indicarle que este archivo lo va a usar este módulo, que no lo borre automáticamente...
+ 	// le podemos asociar el usuario o también podríamos ponerle
+ 	// file_usage_add(file_load($form_state['values']['catalogo_pdf']), 'catalogo', 'catalogo', 1);  // solo hay una aparición de catalogo
+ 	file_usage_add(file_load($form_state['values']['catalogo_pdf']), 'catalogo', 'user', $user->uid);  
+
+
+
  	drupal_set_message('Se ha guardado correctamente',$type='status',$repeat = TRUE);
 
  }
@@ -153,6 +181,28 @@ function _catalogo_get_info(){
 	if ($file){
 		$content .= l('Catálogo PDF',$file->uri); // esto crea un link
 	}
+
+	return $content;
+}
+
+
+function _catalogo_get_info_pagina(){
+	$content = '';
+	if (variable_get('catalogo_oferta')){
+		$content .= '<p>Todo al 20%</p>';
+	}
+	$content .= '<p>'.variable_get('catalogo_desc_larga').'</p>';
+
+	if ($fid = variable_get('catalogo_pdf',0)){
+		$file=file_load($fid);
+		//dsm($file);
+	}
+	if ($file){
+		$content .= l('Catálogo PDF',$file->uri); // esto crea un link
+	}
+
+	$link = l('Gestionar catálogo','admin/config/catalogo');
+	$content .= $link;
 
 	return $content;
 }
