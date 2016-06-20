@@ -79,10 +79,10 @@ function codigo_postal_form_submit(&$form, &$form_state) {
  * Form API submit callback for the type form.
  */
 function calle_codigo_form_submit(&$form, &$form_state) {
-  $codigo_postal = entity_ui_form_submit_build_entity($form, $form_state);
+  $codigo_postal_calle = entity_ui_form_submit_build_entity($form, $form_state);
   // Save and go back.
-  $codigo_postal->save();
-  drupal_set_message('Guardados cambios a código '.$codigo_postal->codigo);
+  $codigo_postal_calle->save();
+  drupal_set_message('Guardados cambios a código '.$codigo_postal_calle->codigo);
   $form_state['redirect'] = 'admin/content/codigoscalle';
 }
 
@@ -93,12 +93,12 @@ function calle_codigo_form_submit(&$form, &$form_state) {
  */
  function calle_codigo_form_validate($node, &$form_state){
 
-  //dsm($form_state);
+  dsm($form_state);
 
   // Ejemplo de comprobación
-  if (strlen($form_state['values']['codigo'])>6){
-    form_set_error('codigo','El código postal debe ser de long 6.');
-  }
+  //if (strlen($form_state['values']['codigo'])>6){
+  //  form_set_error('codigo','El código postal debe ser de long 6.');
+  //}
 
  }
 
@@ -137,7 +137,7 @@ function calle_codigo_form_submit(&$form, &$form_state) {
   //dsm($options);
   
 
-  $form['selected'] = array(
+  $form['codigo'] = array(
        '#type' => 'select',
        '#title' => 'Código postal',
        '#options' =>  $options,

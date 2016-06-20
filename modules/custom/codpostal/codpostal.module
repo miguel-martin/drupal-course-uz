@@ -82,7 +82,22 @@ function codpostal_label($codigo_postal){
  */
 function codpostalcalle_label($codigo_postal_calle){
   if (isset($codigo_postal_calle->codigo)){
-    return 'Código: '. $codigo_postal_calle->codigo;
+    // recuperar de la BD el código postal correspondiente a ese ID.
+    $codigo = db_select('codpostal_codigos', 'cc')
+      ->fields('cc',array('codigo','name'))
+      ->condition('cid', $codigo_postal_calle->codigo,'=')
+      ->orderBy('codigo')
+      ->execute()
+      ->fetchAssoc('cid');
+
+    //dsm($codigo);
+
+    if ($codigo){
+      return 'Calle: '. $codigo_postal_calle->name. " (".$codigo['codigo'].")";
+    }
+    else{
+      return 'Calle: '. $codigo_postal_calle->name;
+    }
   }
   else{
     return "Sin código asignado.";
