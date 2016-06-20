@@ -39,6 +39,18 @@ function codpostal_entity_info() {
 }
 
 
+
+/**
+ * Para saber cómo relacionar en las Views (Advanced > Add relationships) los códigos de una con los de la otra entidad
+ * No es suficiente dejarlo solo como la foreign key...
+ */
+function codpostal_entity_property_info_alter(&$info){
+
+  $info['calle_codigo']['properties']['codigo']['type'] = 'codigo_postal'; 
+  dsm($info);
+}
+
+
 /**
  * ToDo. Otorga accesos a quienes pueden operar sobre codigos postales.
  */
