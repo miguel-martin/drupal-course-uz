@@ -119,12 +119,38 @@ function calle_codigo_form_submit(&$form, &$form_state) {
     '#weight' => -1,
   );
 
-  $form['codigo'] = array(
+
+  // obtengo los códigos que hay en la tabla codpostal_codigos
+  $codigos = db_select('codpostal_codigos', 'cc')
+    ->fields('cc',array('cid','codigo'))
+    ->orderBy('codigo')
+    ->execute()
+    ->fetchAllAssoc('cid');
+
+  //dsm($codigos);
+
+  $options = array();
+  foreach ($codigos as $code){
+    $options[$code->cid] = $code->codigo;
+  }
+
+  //dsm($options);
+  
+
+  $form['selected'] = array(
+       '#type' => 'select',
+       '#title' => 'Código postal',
+       '#options' =>  $options,
+       //'#default_value' => $category['selected'],
+       //'#description' => t('Set this to <em>Yes</em> if you would like this category to be selected by default.'),
+   );
+
+  /*$form['codigo'] = array(
     '#title' => 'Código postal',
     '#type' => 'textfield',
     '#default_value' => isset($codigo_postal_calle->codigo) ? $codigo_postal_calle->codigo : '',
     '#description' => 'El código postal se compone de 5 dígitos o más.',
-  );
+  );*/
 
   $form['name'] = array(
     '#title' => 'Calle',
