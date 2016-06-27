@@ -1,0 +1,32 @@
+<?php
+
+
+/** 
+ * Implements hook_migrate_api
+ * Después de declarar esto, limpiamos cache y vamos a http://localhost/admin/content/migrate y a configuración y le damos a registrar.
+ */
+function curso_migration_migrate_api() {
+  $api = array(
+    'api' => 2,
+    'groups' => array(
+      'curso' => array(
+        'title' => 'Migraciones del curso drupal',
+      ),
+    ),
+    'migrations' => array(
+      'entradasblog' => array(
+        'class_name' => 'EntradasBlogMigration', // clase que implementa esa migración
+        'group_name' => 'curso',
+        'dependencies' => array('categoriasblog'),
+        // te aseguras de que primero hayas hecho el import de categorias, porque este depende del otro.
+      ),
+      'categoriasblog' => array(
+        'class_name' => 'CategoriasBlogMigration', // clase que implementa esa migración
+        'group_name' => 'curso',
+      ),
+    ),
+  );
+  return $api;
+}
+
+

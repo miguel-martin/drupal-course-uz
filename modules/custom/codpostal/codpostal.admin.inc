@@ -141,7 +141,7 @@ function calle_codigo_form_submit(&$form, &$form_state) {
        '#type' => 'select',
        '#title' => 'Código postal',
        '#options' =>  $options,
-       //'#default_value' => $category['selected'],
+       '#default_value' => $codigo_postal_calle->codigo,//['selected'],
        //'#description' => t('Set this to <em>Yes</em> if you would like this category to be selected by default.'),
    );
 

@@ -47,7 +47,7 @@ function codpostal_entity_info() {
 function codpostal_entity_property_info_alter(&$info){
 
   $info['calle_codigo']['properties']['codigo']['type'] = 'codigo_postal'; 
-  dsm($info);
+  //dsm($info);
 }
 
 

@@ -54,6 +54,46 @@ function cursoblog_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-cursoblog-field_tags'.
+  $field_instances['node-cursoblog-field_tags'] = array(
+    'bundle' => 'cursoblog',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'taxonomy',
+        'settings' => array(),
+        'type' => 'taxonomy_term_reference_link',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_tags',
+    'label' => 'tags',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'taxonomy',
+      'settings' => array(
+        'autocomplete_path' => 'taxonomy/autocomplete',
+        'size' => 60,
+      ),
+      'type' => 'taxonomy_autocomplete',
+      'weight' => 31,
+    ),
+  );
+
   // Exported field_instance: 'node-cursoblog-field_tipos'.
   $field_instances['node-cursoblog-field_tipos'] = array(
     'bundle' => 'cursoblog',
@@ -96,6 +136,7 @@ function cursoblog_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Body');
+  t('tags');
   t('tipos');
 
   return $field_instances;

@@ -1,0 +1,7 @@
+name = Curso migration
+description = Pruebas de migraciones
+core = 7.x
+package = Curso
+version = 7.x-1.0
+dependencies[] = migrate
+files[] = includes/entradablog.migrate.inc
