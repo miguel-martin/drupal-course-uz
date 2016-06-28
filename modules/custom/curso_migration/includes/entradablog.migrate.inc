@@ -103,16 +103,32 @@ class EntradasBlogMigration extends Migration {
     	$this->addFieldMapping('field_tipos:source_type')->defaultValue('tid');	
     	$this->addFieldMapping('field_tipos:create_term')->defaultValue(TRUE);
     	$this->addFieldMapping('field_tipos:ignore_case')->defaultValue(TRUE);
+
+    	// aqui haría el mappeo de la imagen si existe
+    	$this->addFieldMapping('field_imagen','img');	// lo mappeo al campo 'img' porque ese campo lo creo "al vuelo" en prepareRow
+    	$this->addFieldMapping('field_imagen:preserve_files')->defaultValue(FALSE);
+    	// el path donde están las imgs
+    	$pathimgs =  drupal_get_path('module', 'curso_migration').'/data/img/';
+    	$this->addFieldMapping('field_imagen:source_dir')->defaultValue($pathimgs);
+
     }
 
 
     /**
      * Vamos a alterar los títulos de cada row.
      * Si devuelvo false en esta prepareRow, se saltaría la fila.
+     * Aqui dentro puedo generar campos también...
      */
     public function prepareRow($row){
-    	dsm($row);
+    	//dsm($row);
     	$row->titulo = 'Blog - '. $row->titulo;
+
+    	// compruebo si existe la img asociada a dicho id.
+    	// si existe, le creo la propiedad img (que es la que mappeo en la línea 108)
+    	$pathposibleimg =  drupal_get_path('module', 'curso_migration').'/data/img/'.$row->id.'.jpg';
+    	if (file_exists($pathposibleimg)){
+    		$row->img=$row->id . '.jpg';
+    	}
     }
 
 	
