@@ -1,5 +1,9 @@
 <?php
 
+// En este archivo haré toda la lógica del MODULO, se llama asi por convencion de nombre.
+
+
+
 /**
  * Implements hook_menu.
  * Definir las rutas del formulario...

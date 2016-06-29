@@ -1,6 +1,6 @@
 <?php
 
-// En este archivo haré toda la lógica del theme
+// En este archivo haré toda la lógica del theme, se llama asi por convencion de nombre.
 
 
 /**
