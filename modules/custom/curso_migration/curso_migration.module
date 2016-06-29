@@ -30,3 +30,41 @@ function curso_migration_migrate_api() {
 }
 
 
+
+/**
+ * Implements hook_menu 
+ */
+function curso_migration_menu(){
+
+	// defino una ruta para el contenido legado.
+	// Lo que antes estaba en /legacy/id-de-blog ahora redirigirá a /node/nid (drupal)
+	$items['legacy/%legacy_to_nid'] = array( // de esta forma, me PREPARA el parámetro % con la funcion legacy_to_nid_load
+    	'title' => 'Gestión de catálogo',
+    	'page callback' => 'drupal_goto', // funcion que va a renderizar un formulario
+    	'page arguments' => array(1), // el id del formulario que renderizará
+    	'access callback' => 'user_is_logged_in', // solo lo ve quien puede administrar contenido
+    	'type' => MENU_CALLBACK,
+  	);
+
+	return $items;
+
+}
+
+/**
+ * Consulta en la BD y redirige a donde procede
+ */
+function legacy_to_nid_load($lid){
+	// SELECT de la tabla map migrate para obtener el nid
+	$result = db_select('migrate_map_entradasblog','mme')
+		->fields('mme',array('destid1'))
+		->condition('sourceid1',$lid,'=')
+		->execute()
+		->fetchField(0);
+
+	if ($result){
+			return 'node/' . $result;
+	}
+	return FALSE; // para que si le pasas a drupal_goto(FALSE) te devuelve el 404
+}
+
+
