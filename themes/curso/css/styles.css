@@ -1,0 +1,37 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+#header {
+	text-align: center;
+}
+#navigation {
+	text-align: right;
+	margin: 15px 0;
+	padding: 15px;
+	background: #F8FFC0;
+}
+#main-wrapper, #breadcrumb {
+	max-width: 1200px;
+	width: 95%;
+	margin: 0 auto;
+}
+
+#sidebar-first {
+	float: left;
+	width: 30%;
+	padding-right: 2em;
+
+}
+#sidebar-first .section{
+	background: #C7F7FF;
+	padding: 15px;
+}
+
+#content {
+	width: 70%;
+	float: right;
+}

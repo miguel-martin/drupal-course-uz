@@ -168,7 +168,7 @@ function catalogo_block_view($delta){
 }
 
 function _catalogo_get_info(){
-	$content = '';
+	/*$content = '';
 	if (variable_get('catalogo_oferta')){
 		$content .= '<p>Todo al 20%</p>';
 	}
@@ -176,13 +176,19 @@ function _catalogo_get_info(){
 
 	if ($fid = variable_get('catalogo_pdf',0)){
 		$file=file_load($fid);
-		//dsm($file);
 	}
 	if ($file){
 		$content .= l('Catálogo PDF',$file->uri); // esto crea un link
-	}
+	}*/
 
-	return $content;
+	//return $content; // ahora ya no usaremos la devolución del contenido, sino que pasamos al control al theme.
+
+
+	// ahora vamos a usar la potencia de theme para poder hacer preprocess y process
+	$variables['catalogo_desc_corta'] = variable_get('catalogo_desc_corta');
+	$variables['catalogo_pdf'] = variable_get('catalogo_pdf');
+	$variables['catalogo_oferta'] = variable_get('catalogo_oferta');
+	return theme('catalogo_bloque', $variables);			// el nombre de catalogo_bloque será el que le hemos definido en el hook_theme
 }
 
 
@@ -206,3 +212,44 @@ function _catalogo_get_info_pagina(){
 
 	return $content;
 }
+
+
+
+
+/**
+ * Implements hook_theme()
+ */
+function catalogo_theme($existing, $type, $theme, $path){
+	return array(
+		'catalogo_bloque' => array ( 			// le indicamos cómo renderizar catálogo bloque
+			'template' => 'catalogo-bloque',	// se renderizará con esta plantilla catalogo-bloque.tpl.php
+												// si no pusiera la plantilla, me buscaría la funcion theme_catalogo_bloque
+			'variables' => array(	
+				'catalogo_desc_corta' => NULL,	// las variables que espera tener. si no se las paso, saldrían a null
+				'catalogo_oferta' => NULL,
+				'catalogo_pdf' => NULL,
+			) 
+		)
+
+	);
+
+}
+
+
+/**
+ * Implement template_process_HOOK
+ * Vamos a preparar las variables, por ejemplo la de PDF.
+ * También podemos CREAR nuevas variables aqui, como por ejemplo enlace_pdf
+ */
+function template_process_catalogo_bloque(&$variables){
+
+	if ($variables['catalogo_pdf']){
+		$file=file_load($variables['catalogo_pdf']);
+	    if ($file){
+		    $pdf = l('Catálogo PDF',file_create_url($file->uri)); // esto crea un link
+		    $variables['enlace_pdf'] = $pdf;
+	    }
+	}
+
+}
+
