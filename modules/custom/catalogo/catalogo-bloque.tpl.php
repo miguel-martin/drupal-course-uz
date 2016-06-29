@@ -1,7 +1,7 @@
 <div id="catalogo">
     
     <?php if($catalogo_desc_corta): ?>
-       <p><?php print $catalogo_desc_corta; ?></p>
+       <h2><?php print $catalogo_desc_corta; ?></h2>
     <?php endif;?>
 
     <?php if($catalogo_oferta): ?>

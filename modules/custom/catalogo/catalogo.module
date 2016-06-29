@@ -210,6 +210,8 @@ function _catalogo_get_info_pagina(){
 	$link = l('Gestionar catálogo','admin/config/catalogo');
 	$content .= $link;
 
+	// ToDo cambiar esto para que llame a theme tb
+
 	return $content;
 }
 
@@ -221,11 +223,11 @@ function _catalogo_get_info_pagina(){
  */
 function catalogo_theme($existing, $type, $theme, $path){
 	return array(
-		'catalogo_bloque' => array ( 			// le indicamos cómo renderizar catálogo bloque
+		'catalogo_bloque' => array ( 		// le indicamos cómo renderizar catalogo_bloque -> da nombre al hook para template_process_HOOK
 			'template' => 'catalogo-bloque',	// se renderizará con esta plantilla catalogo-bloque.tpl.php
 												// si no pusiera la plantilla, me buscaría la funcion theme_catalogo_bloque
 			'variables' => array(	
-				'catalogo_desc_corta' => NULL,	// las variables que espera tener. si no se las paso, saldrían a null
+				'catalogo_desc_corta' => NULL,	// las variables que espera recibir de quien llame a theme. si no se las paso, salen a null
 				'catalogo_oferta' => NULL,
 				'catalogo_pdf' => NULL,
 			) 
@@ -242,6 +244,8 @@ function catalogo_theme($existing, $type, $theme, $path){
  * También podemos CREAR nuevas variables aqui, como por ejemplo enlace_pdf
  */
 function template_process_catalogo_bloque(&$variables){
+	// ToDo sería más conveniente aun hacer en el preprocess settear la variable con la ruta, mimetype, ... (hacer el file_load)
+	// y luego ya generar el link en el process, osea, aqui
 
 	if ($variables['catalogo_pdf']){
 		$file=file_load($variables['catalogo_pdf']);

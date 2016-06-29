@@ -13,8 +13,15 @@ function curso_preprocess_html(&$variables){
  	$variables['classes_array'][] = 'contenedor-fijo';
  }
 
-
-
  //  dsm($variables);
-
 }
+
+
+/**
+ * El theme tiene la última palabra sobre lo que se muestra...
+ */
+function curso_preprocess_catalogo_bloque(&$variables){
+	// dsm($variables);
+	$variables['catalogo_desc_corta'] = 'Modifico en el theme '.$variables['catalogo_desc_corta'];
+}
+
