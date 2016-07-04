@@ -1,4 +1,4 @@
 id;titulo;contenido;categoria;etiquetas;title;content;englishtags
 1;Mi post1 en español;"Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue; diam id ornare imperdiet; sapien urna pretium nisl; ut volutpat sapien arcu sed augue. Aliquam erat volutpat.
-In congue. Etiam justo. Etiam pretium iaculis justo.";1;decoración,jardines;Mi post1 en inglés;"English contents1";decoration
-2;Titulo Español2;"Contenido en español2";1;decoración,jardines;English title2;"English contents2";decoration
+In congue. Etiam justo. Etiam pretium iaculis justo.";1;decoración,jardines;My english post1;"English contents1";decoration
+2;Mi post2 en español;"Contenido en español2";1;decoración,jardines;My english post 2;"English contents2";decoration

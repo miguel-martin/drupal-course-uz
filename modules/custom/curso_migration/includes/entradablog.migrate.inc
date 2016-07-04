@@ -290,5 +290,13 @@ class EntradasBlogMigrationSpanish extends Migration {
         }
     }
 
+    public function completeRollback($entity_id) {
+        //parent::completeRollback();
+        // Code to execute after an entity has been rolled back.
+
+        // ToDo set the original source tnid's to 0
+        dsm($entity_id);
+    }
+
     
 }
