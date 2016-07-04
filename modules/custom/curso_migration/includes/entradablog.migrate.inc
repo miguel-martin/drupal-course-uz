@@ -256,6 +256,8 @@ class EntradasBlogMigrationSpanish extends Migration {
      */
     public function complete($entity,$row){
         
+        //ToDo: Comprobar por código que este tipo de contenido admite la traducción
+
         // el nodo que acabo de crear es traducción al español...    
         $nidSpanish = $entity->nid;
 
@@ -278,16 +280,14 @@ class EntradasBlogMigrationSpanish extends Migration {
             if ($res){ // existe dicha entrada...
                 $nidEnglish = $res['destid1']; // el nodo original
                 $nodeEnglish = node_load($nidEnglish);
-                //$nodeEnglish_wrapper = entity_metadata_wrapper('node', $nodeEnglish);
                 $nodeEnglish->translation_source = node_load($nidSpanish);
                 $nodeEnglish->tnid = $nodeEnglish->nid;
                 node_save($nodeEnglish);
                 dsm($nodeEnglish);
 
                 // Ahora actualizo también el nodo en español para indicarle el tnid correcto...
-                $nodeSpanish = node_load($nidSpanish);
-                $nodeSpanish->tnid = $nodeEnglish->nid;
-                node_save($nodeSpanish);
+                $entity->tnid = $nodeEnglish->nid;
+                node_save($entity);
                 dsm($nodeSpanish);
             }
 
