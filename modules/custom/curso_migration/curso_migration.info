@@ -1,4 +1,4 @@
-;###  Comandos para dejar listo multi-idioma
+;###  Multilang base drush cmds
 ;###   drush dl drush_language
 ;###   drush dl l10n_update && drush en -y $_
 ;###
@@ -11,6 +11,9 @@
 ; Goto http://localhost/admin/config/regional/entity_translation
 ; and make sure "node" is translatable (ToDo in code!)
 
+; Goto http://localhost/admin/config/regional/language/language_switcher
+; and configure language switcher properly
+
 
 name = Curso migration
 description = Pruebas de migraciones
@@ -21,5 +24,14 @@ dependencies[] = migrate
 dependencies[] = language_switcher
 dependencies[] = entity_translation
 dependencies[] = i18n
-dependencies[] = i10n
+dependencies[] = l10n_update
+;dependencies[] = i18n_block
+;dependencies[] = i18n_field    
+;dependencies[] = i18n_menu
+dependencies[] = i18n_node
+;dependencies[] = i18n_string
+;dependencies[] = i18n_taxonomy
+;dependencies[] = i18n_translation
+
+
 files[] = includes/entradablog.migrate.inc

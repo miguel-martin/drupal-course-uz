@@ -132,7 +132,7 @@ class EntradasBlogMigrationEnglish extends Migration {
      */
     public function prepareRow($row){
         //dsm($row);
-        $row->titulo = 'English Blog - '. $row->title;
+        //$row->titulo = 'English Blog - '. $row->title;
 
         // compruebo si existe la img asociada a dicho id.
         // si existe, le creo la propiedad img (que es la que mappeo en la línea 108)
@@ -237,7 +237,7 @@ class EntradasBlogMigrationSpanish extends Migration {
      */
     public function prepareRow($row){
         //dsm($row);
-        $row->titulo = 'Spanish Blog - '. $row->title;
+        //$row->titulo = 'Spanish Blog - '. $row->title;
 
         // compruebo si existe la img asociada a dicho id.
         // si existe, le creo la propiedad img (que es la que mappeo en la línea 108)
@@ -261,9 +261,6 @@ class EntradasBlogMigrationSpanish extends Migration {
         // el nodo que acabo de crear es traducción al español...    
         $nidSpanish = $entity->nid;
 
-        //dsm($entity);
-        //dsm($row);
-
         if (isset($row->id)){
             drupal_set_message('Se ha encontrado una traducción de ese contenido', 'warning');
             // miro si existe entrada para esa row en la tabla migrate_map_entradasblogenglish
@@ -279,8 +276,8 @@ class EntradasBlogMigrationSpanish extends Migration {
 
             if ($res){ // existe dicha entrada...
                 $nidEnglish = $res['destid1']; // el nodo original
-                $nodeEnglish = node_load($nidEnglish);
-                $nodeEnglish->translation_source = node_load($nidSpanish);
+                $nodeEnglish = node_load($nidEnglish); // cargo nodo original
+                $nodeEnglish->translation_source = node_load($nidSpanish); // hace algo?
                 $nodeEnglish->tnid = $nodeEnglish->nid;
                 node_save($nodeEnglish);
                 dsm($nodeEnglish);
@@ -290,8 +287,6 @@ class EntradasBlogMigrationSpanish extends Migration {
                 node_save($entity);
                 dsm($nodeSpanish);
             }
-
-            
         }
     }
 
