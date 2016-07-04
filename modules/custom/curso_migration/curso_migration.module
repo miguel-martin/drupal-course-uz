@@ -14,11 +14,16 @@ function curso_migration_migrate_api() {
       ),
     ),
     'migrations' => array(
-      'entradasblog' => array(
-        'class_name' => 'EntradasBlogMigration', // clase que implementa esa migración
+      'entradasblogenglish' => array(
+        'class_name' => 'EntradasBlogMigrationEnglish', // clase que implementa esa migración
         'group_name' => 'curso',
         'dependencies' => array('categoriasblog'),
         // te aseguras de que primero hayas hecho el import de categorias, porque este depende del otro.
+      ),
+      'entradasblogspanish' => array(
+        'class_name' => 'EntradasBlogMigrationSpanish',
+        'group_name' => 'curso',
+        'dependencies' => array('categoriasblog','entradasblogenglish'),
       ),
       'categoriasblog' => array(
         'class_name' => 'CategoriasBlogMigration', // clase que implementa esa migración
