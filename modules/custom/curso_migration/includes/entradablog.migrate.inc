@@ -262,7 +262,7 @@ class EntradasBlogMigrationSpanish extends Migration {
         $nidSpanish = $entity->nid;
 
         if (isset($row->id)){
-            drupal_set_message('Se ha encontrado una traducción de ese contenido', 'warning');
+            
             // miro si existe entrada para esa row en la tabla migrate_map_entradasblogenglish
             // query(sourceid1=$row->id)
             $res = db_select('migrate_map_entradasblogenglish', 'mm')
@@ -272,31 +272,35 @@ class EntradasBlogMigrationSpanish extends Migration {
                 ->execute()
                 ->fetchAssoc();
 
-            dsm($res);
+            //dsm($res);
 
             if ($res){ // existe dicha entrada...
+                drupal_set_message(t('Se ha encontrado una traducción de ese contenido'), 'warning');
                 $nidEnglish = $res['destid1']; // el nodo original
                 $nodeEnglish = node_load($nidEnglish); // cargo nodo original
                 $nodeEnglish->translation_source = node_load($nidSpanish); // hace algo?
                 $nodeEnglish->tnid = $nodeEnglish->nid;
                 node_save($nodeEnglish);
-                dsm($nodeEnglish);
+                
 
                 // Ahora actualizo también el nodo en español para indicarle el tnid correcto...
                 $entity->tnid = $nodeEnglish->nid;
                 node_save($entity);
-                dsm($nodeSpanish);
             }
         }
     }
 
-    public function completeRollback($entity_id) {
-        //parent::completeRollback();
-        // Code to execute after an entity has been rolled back.
-
-        // ToDo set the original source tnid's to 0
-        dsm($entity_id);
+    /**
+     * Code to execute before an entity has been rolled back
+     */
+    public function prepareRollback($entity_ids) {
+        // settear los tnid de todos los nodos en inglés a 0 (indicar que no hay traducción)
+        foreach ($entity_ids as $entity_id){
+                $nodeSpanish = node_load($entity_id);
+                $nodeEnglish = node_load($nodeSpanish->tnid);
+                $nodeEnglish->tnid = 0;
+                node_save($nodeEnglish);
+        }
     }
 
-    
 }
